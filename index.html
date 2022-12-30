@@ -4,27 +4,54 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href=".assets/CSS/style.css">
+    <link rel="stylesheet" href="./assets/CSS/style.css">
     <title>Code Quiz</title>
 </head>
 
 <body>
     <!-- header - "view high score" "count down timer" -->
-    <header>
-        <nav>View high Score</nav>
+    <header id="header">
+        <a href="#score">View high Score</a>
         <h1>Welcome to Code Quiz</h1>
-        
+        <p>timer</p>
     </header>
-    <!-- main - quiz question & 4 multiple choices-->
-        <!-- questions show here -->
-        <p></p>
-        <!-- 4 buttons for multiple choices -->
-        <button></button>
 
+    <!-- ask user if they like to play -->
+    <section id="start-section" class="visible">
+        <!-- starts the timer and the quiz -->
+        <h3>Would you like to start the quiz?</h3>
+        <button id="start-btn">Start</button>
+    </section>
+
+    <!-- main - quiz question & 4 multiple choices-->
+    <!-- questions show here -->
+    <section id="quiz-section" class="hidden">
+        <!-- quiz questions -->
+        <p class="question">questions</p>
+        <!-- 4 buttons for multiple choices -->
+        <button class="choices">placeholder</button>
+        <button class="choices">placeholder</button>
+        <button class="choices">placeholder</button>
+        <button class="choices">placeholder</button>
+    </section>
+
+
+    <!-- ask user for initials -->
+    <section id="user-info" class="hidden">
+        <form action="">
+            <input type="text">
+            <button>Submit</button>
+        </form>
+    </section>
+
+    <!-- score board  -->
     <!-- show final score and enter initial after quiz complete -->
-    <h2></h2>
+    <section id="score" class="hidden">
+        <h3>your score is: </h3>
+    </section>
 
     <script src="./assets/js/script.js"></script>
 </body>
 
 </html>
+ 

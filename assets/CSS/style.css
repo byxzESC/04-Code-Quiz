@@ -1,0 +1,33 @@
+body {
+    text-align: center;
+}
+
+/* #header {
+    display: none;
+} */
+#header {
+}
+
+#start {
+    background-color: yellow;
+}
+
+#quiz {
+    background-color: blue;
+}
+
+#user-info {
+    background-color: red;
+}
+
+#score {
+    background-color: blueviolet;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
