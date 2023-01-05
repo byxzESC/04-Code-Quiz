@@ -15,6 +15,9 @@ var startButton = $('#start-btn');
 var quizSection = $('#quiz-section');
 var questionElement = $('#question');
 var highScore = $('#high-score');
+var timerElement = $('#timer');
+var timer;
+var secondsLeft;
 
 var buttonA = $('#buttonA');
 var buttonB = $('#buttonB');
@@ -24,19 +27,24 @@ var answerMessage = $('#answer-message');
 
 var randomizedQuestions = [];
 var currentQuestion = 0;
+var score = 0;
 
 // whenever player clicked on an answer we move on the next question
     // changing content of question and answer tag by setting reference to the question object
-
 // all the way till player done with the quiz
-// after that player able to enter their initial and see the leader board 
+// after that player able to enter their initial and see the leader board
 
 // function for starting the quiz
+    // randomized questions
+    // start timer
+    // show questions and answers
 function startQuiz () {
     randomizedQuestions = shuffleQuestions(questionBank);
-    // renderQuestion();
-    renderAnswers();
+    secondsLeft = 40;
+    timerStart();
+    renderQuestions();
 }
+
 // randomize the questionBank objects array
 function shuffleQuestions (questions) {
     var result;
@@ -46,13 +54,7 @@ function shuffleQuestions (questions) {
     return result;
 }
 
-// function for rendering questions and answers
-// function renderQuestion() {
-//     console.log(randomizedQuestions[currentQuestion].question);
-//     questionElement.text(randomizedQuestions[currentQuestion].question);
-// }
-
-function renderAnswers() {
+function renderQuestions() {
     questionElement.text(randomizedQuestions[currentQuestion].question);
     buttonA.text(randomizedQuestions[currentQuestion].answerA);
     buttonB.text(randomizedQuestions[currentQuestion].answerB);
@@ -61,31 +63,29 @@ function renderAnswers() {
 }
 
 function nextQuestion (message) {
+
     // correct/wrong msg
     if (message === 'correct') {
+        score++;
+        answerMessage.fadeIn(100);
         answerMessage.text('correct');
-        answerMessage.fadeOut(1000);
-    } else {
+        answerMessage.fadeOut(500);
+    } else if (message === 'wrong') {
+        answerMessage.fadeIn(100);
         answerMessage.text('wrong');
-        answerMessage.fadeOut(1000);
+        answerMessage.fadeOut(500);
     }
 
-    // question
-    if (currentQuestion === 0) {
-        currentQuestion++;
-        renderAnswers();
-    } else if (currentQuestion === randomizedQuestions.length) {
-        // game ends show score and ask to sign initial
+    // check answer
+    if (currentQuestion === randomizedQuestions.length - 1) {
+        gameOver();
     } else {
         currentQuestion++;
-        // renderQuestion();
-        renderAnswers();
+        renderQuestions();
     }
-
 }
 
-buttonA.on('click', function(e) {
-    console.log(e.target);
+buttonA.on('click', function() {
     var answer = 'answerA';
     if (answer === randomizedQuestions[currentQuestion].correctAnswer) {
         nextQuestion('correct');
@@ -136,55 +136,104 @@ startButton.on('click', function () {
     startQuiz();
 });
 
-    // Questions are an array of question objects
+function gameOver() {
+    clearInterval(timer);
+    timerElement.text("");
+    hideShow(highScore, quizSection, startSection);
+    highScore.text('Your score is ' + score + '/10');
+}
+
+function timerStart() {
+    timer = setInterval (function() {
+        secondsLeft--;
+        timerElement.text(secondsLeft + " left");
+        if(secondsLeft === 0) {
+            gameOver();
+        }
+    }, 1000);
+}
+
+// Questions are an array of question objects
 var questionBank = [
     {
-        question: 'what is 1 + 1?',
-        answerA: 'javascript',
-        answerB: 'javascript',
-        answerC: 'javascript',
-        answerD: 'javascript',
+        question: 'What are not JavaScript Data Types?',
+        answerA: 'number',
+        answerB: 'boolean',
+        answerC: 'object',
+        answerD: 'null',
+        correctAnswer: 'answerD',
+    },
+    {
+        question: 'Which company developed JavaScript?',
+        answerA: 'Netscape',
+        answerB: 'Alphabet',
+        answerC: 'Microsoft',
+        answerD: 'Oracle',
         correctAnswer: 'answerA',
     },
     {
-        question: 'what is 2 + 1?',
-        answerA: 'javascript',
-        answerB: 'javascript',
-        answerC: '4',
-        answerD: '5',
+        question: 'Which symbol is used for comments in Javascript?',
+        answerA: '//',
+        answerB: '/! !/',
+        answerC: '#',
+        answerD: '$',
         correctAnswer: 'answerA',
     },
     {
-        question: 'what is 3 + 1?',
-        answerA: 'javascript',
-        answerB: 'javascript',
-        answerC: '4',
-        answerD: '5',
-        correctAnswer: 'answerA',
+        question: 'What is === operator?',
+        answerA: 'or',
+        answerB: 'equality',
+        answerC: 'assignment',
+        answerD: 'strict equality',
+        correctAnswer: 'answerD',
     },
     {
-        question: 'what is 4 + 1?',
-        answerA: 'javascript',
-        answerB: 'javascript',
-        answerC: '4',
-        answerD: '5',
-        correctAnswer: 'answerA',
+        question: 'What are not looping structures in JavaScript?',
+        answerA: 'while',
+        answerB: 'for',
+        answerC: 'do-while',
+        answerD: 'if',
+        correctAnswer: 'answerD',
     },
     {
-        question: 'what is 5 + 1?',
-        answerA: 'javascript',
-        answerB: 'javascript',
-        answerC: '4',
-        answerD: '5',
-        correctAnswer: 'answerA',
+        question: 'What would be the result of 3+2+"7"?',
+        answerA: '12',
+        answerB: '327',
+        answerC: '57',
+        answerD: '39',
+        correctAnswer: 'answerC',
     },
     {
-        question: 'what is 6 + 1?',
-        answerA: 'javascript',
-        answerB: 'javascript',
-        answerC: '4',
-        answerD: '5',
-        correctAnswer: 'answerA',
+        question: 'What are not a type of Pop up boxes available in JavaScript?',
+        answerA: 'alert',
+        answerB: 'confirm and',
+        answerC: 'prompt',
+        answerD: 'console.log',
+        correctAnswer: 'answerD',
+    },
+    {
+        question: 'What does typeof function returns?',
+        answerA: 'type of object',
+        answerB: 'type of variable',
+        answerC: 'type of function',
+        answerD: 'type of boolean',
+        correctAnswer: 'answerB',
+    },
+    {
+        question: 'What is the data type of variables in JavaScript?',
+        answerA: 'variable',
+        answerB: 'constants',
+        answerC: 'object data',
+        answerD: 'array',
+        correctAnswer: 'answerC',
+    },
+    {
+        question: 'How many array is [[[]]] represents?',
+        answerA: '1',
+        answerB: '2',
+        answerC: '3',
+        answerD: '4',
+        correctAnswer: 'answerC',
     },
 ]
 
