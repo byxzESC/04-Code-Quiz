@@ -72,6 +72,7 @@ function nextQuestion (message) {
 
     // question
     if (currentQuestion === 0) {
+        currentQuestion++;
         renderAnswers();
     } else if (currentQuestion === randomizedQuestions.length) {
         // game ends show score and ask to sign initial
