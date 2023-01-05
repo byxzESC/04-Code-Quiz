@@ -14,6 +14,7 @@ var startButton = $('#start-btn');
 
 var quizSection = $('#quiz-section');
 var questionElement = $('#question');
+var highScore = $('#high-score');
 
 var buttonA = $('#buttonA');
 var buttonB = $('#buttonB');
@@ -32,14 +33,12 @@ var currentQuestion = 0;
 
 // function for starting the quiz
 function startQuiz () {
-    console.log('startQuiz check');
     randomizedQuestions = shuffleQuestions(questionBank);
-    renderQuestion();
+    // renderQuestion();
     renderAnswers();
 }
 // randomize the questionBank objects array
 function shuffleQuestions (questions) {
-    console.log('shuffle questions check');
     var result;
     result = questions.sort(function() {
         return Math.random() - 0.5;
@@ -47,39 +46,45 @@ function shuffleQuestions (questions) {
     return result;
 }
 
-function renderQuestion() {
-    console.log('render question check');
-    console.log(randomizedQuestions[currentQuestion].question);
-    questionElement.text(randomizedQuestions[currentQuestion].question);
-}
+// function for rendering questions and answers
+// function renderQuestion() {
+//     console.log(randomizedQuestions[currentQuestion].question);
+//     questionElement.text(randomizedQuestions[currentQuestion].question);
+// }
 
-// function for rendering answers
 function renderAnswers() {
-    console.log('render answer check');
+    questionElement.text(randomizedQuestions[currentQuestion].question);
     buttonA.text(randomizedQuestions[currentQuestion].answerA);
     buttonB.text(randomizedQuestions[currentQuestion].answerB);
     buttonC.text(randomizedQuestions[currentQuestion].answerC);
     buttonD.text(randomizedQuestions[currentQuestion].answerD);
 }
 
-// correct/wrong msg
 function nextQuestion (message) {
+    // correct/wrong msg
     if (message === 'correct') {
         answerMessage.text('correct');
-        setTimeout(function() {
-            answerMessage.style.opacity = 0;
-        }, 1000 * 0.8);
+        answerMessage.fadeOut(1000);
     } else {
-        answerMessage.fadeout.text('wrong');
+        answerMessage.text('wrong');
+        answerMessage.fadeOut(1000);
     }
 
-    // next question
-    currentQuestion++;
-    renderQuestion();
-    renderAnswers();
+    // question
+    if (currentQuestion === 0) {
+        renderAnswers();
+    } else if (currentQuestion === randomizedQuestions.length) {
+        // game ends show score and ask to sign initial
+    } else {
+        currentQuestion++;
+        // renderQuestion();
+        renderAnswers();
+    }
+
 }
 
-buttonA.on('click', function() {
+buttonA.on('click', function(e) {
+    console.log(e.target);
     var answer = 'answerA';
     if (answer === randomizedQuestions[currentQuestion].correctAnswer) {
         nextQuestion('correct');
@@ -116,17 +121,17 @@ buttonD.on('click', function() {
 });
 
 // function to hide and show start and quiz elements
-function hideShow (hide, show) {
-    console.log('hideshow function check')
-    hide.removeClass('visible');
-    hide.addClass('hidden');
+function hideShow (show, hide, hide2) {
     show.removeClass('hidden');
     show.addClass('visible');
+    hide.removeClass('visible');
+    hide.addClass('hidden');
+    hide2.removeClass('visible');
+    hide2.addClass('hidden');
 }
 
 startButton.on('click', function () {
-    console.log('start button check')
-    hideShow(startSection, quizSection);
+    hideShow(quizSection, startSection, highScore);
     startQuiz();
 });
 
@@ -134,48 +139,48 @@ startButton.on('click', function () {
 var questionBank = [
     {
         question: 'what is 1 + 1?',
-        answerA: '2',
-        answerB: '3',
-        answerC: '4',
-        answerD: '5',
+        answerA: 'javascript',
+        answerB: 'javascript',
+        answerC: 'javascript',
+        answerD: 'javascript',
         correctAnswer: 'answerA',
     },
     {
         question: 'what is 2 + 1?',
-        answerA: '2',
-        answerB: '3',
+        answerA: 'javascript',
+        answerB: 'javascript',
         answerC: '4',
         answerD: '5',
         correctAnswer: 'answerA',
     },
     {
         question: 'what is 3 + 1?',
-        answerA: '2',
-        answerB: '3',
+        answerA: 'javascript',
+        answerB: 'javascript',
         answerC: '4',
         answerD: '5',
         correctAnswer: 'answerA',
     },
     {
         question: 'what is 4 + 1?',
-        answerA: '2',
-        answerB: '3',
+        answerA: 'javascript',
+        answerB: 'javascript',
         answerC: '4',
         answerD: '5',
         correctAnswer: 'answerA',
     },
     {
         question: 'what is 5 + 1?',
-        answerA: '2',
-        answerB: '3',
+        answerA: 'javascript',
+        answerB: 'javascript',
         answerC: '4',
         answerD: '5',
         correctAnswer: 'answerA',
     },
     {
         question: 'what is 6 + 1?',
-        answerA: '2',
-        answerB: '3',
+        answerA: 'javascript',
+        answerB: 'javascript',
         answerC: '4',
         answerD: '5',
         correctAnswer: 'answerA',

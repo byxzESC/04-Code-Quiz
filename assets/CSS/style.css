@@ -1,13 +1,21 @@
 body {
     text-align: center;
+    background-color: #011F3F;
+    color: azure;
 }
 
-/* #header {
+.hidden {
     display: none;
-} */
+}
+
+.visible {
+    display: block;
+}
+
 #header {
     display: flex;
     flex-wrap: wrap;
+    margin-top: 3%;
 }
 
 #header a {
@@ -24,26 +32,42 @@ body {
     width: 30%;
 }
 
-#start {
-    background-color: yellow;
+#start-section {
+    font-size: 1.5rem;
 }
 
-#quiz {
+#start-section button {
+    height: 80px;
+    width: 300px;
+    font-size: 2rem;
+    margin: 25px;
+    border: 15px solid black;
+}
+
+.choice-btn {
+    margin: 25px;
+    display: inline-block;
+    height: 50px;
+    width: 200px;
+    border: 15px solid black;
+    border-radius: 20%;
+}
+
+#question {
+    font-size: 2rem;
+}
+
+
+
+#answer-message {
     background-color: blue;
+    font-size: 2rem;
+    margin-top: 2rem;
+    text-align: left;
+
 }
 
-#user-info {
-    background-color: red;
-}
-
-#score {
-    background-color: blueviolet;
-}
-
-.hidden {
-    display: none;
-}
-
-.visible {
-    display: block;
-}
+.container {
+    width: 70%;
+    margin: auto;
+  }

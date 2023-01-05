@@ -17,7 +17,7 @@
     </header>
 
     <!-- ask user if they like to play -->
-    <section id="start-section" class="visible">
+    <section id="start-section" class="container visible">
         <!-- starts the timer and the quiz -->
         <h3>Would you like to start the quiz?</h3>
         <button id="start-btn">Start</button>
@@ -25,21 +25,21 @@
 
     <!-- main - quiz question & 4 multiple choices-->
     <!-- questions show here -->
-    <section id="quiz-section" class="hidden">
+    <section id="quiz-section" class="container hidden">
         <!-- quiz questions -->
         <p id="question"></p>
         <!-- 4 buttons for multiple choices -->
-        <button id="buttonA" class="choices-1"></button>
-        <button id="buttonB" class="choices-2"></button>
-        <button id="buttonC" class="choices-3"></button>
-        <button id="buttonD" class="choices-4"></button>
+        <button id="buttonA" class="choice-btn"></button>
+        <button id="buttonB" class="choice-btn"></button>
+        <button id="buttonC" class="choice-btn"></button>
+        <button id="buttonD" class="choice-btn"></button>
 
         <div id="answer-message"></div>
     </section>
 
 
     <!-- ask user for initials -->
-    <section id="user-info" class="hidden">
+    <section id="user-info" class="container hidden">
         <form action="">
             <input type="text">
             <button>Submit</button>
@@ -48,7 +48,7 @@
 
     <!-- score board  -->
     <!-- show final score and enter initial after quiz complete -->
-    <section id="score" class="hidden">
+    <section id="high-score">
         <h3>your score is: </h3>
     </section>
 
