@@ -1,6 +1,3 @@
-credit for example questions 
-https://www.guru99.com/javascript-interview-questions-answers.html
-
 # 04-Code-Quiz
 
 ## Description 
