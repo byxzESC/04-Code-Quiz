@@ -11,23 +11,31 @@
 // variable to keep score, initials, different section of html 
 var startSection = $('#start-section');
 var startButton = $('#start-btn');
-
 var quizSection = $('#quiz-section');
-var questionElement = $('#question');
-var highScore = $('#high-score');
-var timerElement = $('#timer');
-var timer;
-var secondsLeft;
+var userInfo = $('#user-info');
+var highScoreEl = $('#high-score');
+var scoreBoard = $('#score-board');
+var tryAgain = $('try-again');
 
+// quiz question and answers variables
+var questionEl = $('#question');
 var buttonA = $('#buttonA');
 var buttonB = $('#buttonB');
 var buttonC = $('#buttonC');
 var buttonD = $('#buttonD');
 var answerMessage = $('#answer-message');
 
+// variable for timer and high score
+var playerScore = $('#player-score');
+var initialFormEl = $('#initial-form');
+var timerEl = $('#timer');
+var timer;
+var secondsLeft;
+
 var randomizedQuestions = [];
-var currentQuestion = 0;
-var score = 0;
+var currentQuestion;
+var score;
+var highScore = [];
 
 // whenever player clicked on an answer we move on the next question
     // changing content of question and answer tag by setting reference to the question object
@@ -40,9 +48,23 @@ var score = 0;
     // show questions and answers
 function startQuiz () {
     randomizedQuestions = shuffleQuestions(questionBank);
+    score = 0;
+    currentQuestion = 0;
+    clearInterval(timer);
+    highScoreEl.text('');
     secondsLeft = 40;
     timerStart();
     renderQuestions();
+}
+
+function timerStart() {
+    timer = setInterval (function() {
+        secondsLeft--;
+        timerEl.text(secondsLeft + " left");
+        if(secondsLeft === 0) {
+            gameOver();
+        }
+    }, 1000);
 }
 
 // randomize the questionBank objects array
@@ -55,7 +77,7 @@ function shuffleQuestions (questions) {
 }
 
 function renderQuestions() {
-    questionElement.text(randomizedQuestions[currentQuestion].question);
+    questionEl.text(randomizedQuestions[currentQuestion].question);
     buttonA.text(randomizedQuestions[currentQuestion].answerA);
     buttonB.text(randomizedQuestions[currentQuestion].answerB);
     buttonC.text(randomizedQuestions[currentQuestion].answerC);
@@ -63,27 +85,88 @@ function renderQuestions() {
 }
 
 function nextQuestion (message) {
-
+    answerMessage.text('');
     // correct/wrong msg
     if (message === 'correct') {
         score++;
         answerMessage.fadeIn(100);
         answerMessage.text('correct');
-        answerMessage.fadeOut(500);
+        answerMessage.fadeOut(900);
     } else if (message === 'wrong') {
         answerMessage.fadeIn(100);
         answerMessage.text('wrong');
-        answerMessage.fadeOut(500);
+        answerMessage.fadeOut(900);
     }
 
     // check answer
-    if (currentQuestion === randomizedQuestions.length - 1) {
+    // randomizedQuestions.length - 1
+    if (currentQuestion === 2) {
         gameOver();
     } else {
         currentQuestion++;
         renderQuestions();
     }
 }
+
+function gameOver() {
+    clearInterval(timer);
+    timerEl.text("");
+    hideShow(userInfo, quizSection, startSection);
+    playerScore.text('Your score is ' + score + '/10');
+}
+
+// function to hide and show start and quiz elements
+function hideShow (show, hide, hide2) {
+    show.removeClass('hidden');
+    show.addClass('visible');
+    hide.removeClass('visible');
+    hide.addClass('hidden');
+    hide2.removeClass('visible');
+    hide2.addClass('hidden');
+}
+
+// function handleFormSubmit (e) {
+//     console.log('form submitted');
+//     e.preventDefault();
+//     // playerInitial = $('input[name=initial]').val();
+//     localStorage.setItem('scoreHistory', JSON.stringify(highScore));
+// }
+
+// show high score when player clicks on high score or when game over
+function highScoreList () {
+    var storedScores = JSON.parse(localStorage.getItem('scoreHistory'));
+    if (storedScores !== null) {
+        highScore = storedScores;
+    }
+    renderHighScores();
+}
+
+function renderHighScores () {
+    highScoreEl.innerHTML = "";
+
+    for (var i = 0; i < highScore.length; i++) {
+        var playerScore = highScore[i];
+        var li = document.createElement("li");
+        li.textContent = playerScore.initial + ' has score of ' + playerScore.playerScore + ' points.';
+        highScoreEl.append(li);
+    }
+
+    tryAgain.addClass('visible');
+}
+
+tryAgain.on('click', function() {
+    startQuiz();
+});
+
+scoreBoard.on('click', function() {
+    hideShow(highScoreEl, startSection, quizSection);
+    renderHighScores();
+});
+
+startButton.on('click', function () {
+    hideShow(quizSection, startSection, highScoreEl);
+    startQuiz();
+});
 
 buttonA.on('click', function() {
     var answer = 'answerA';
@@ -121,37 +204,19 @@ buttonD.on('click', function() {
     }
 });
 
-// function to hide and show start and quiz elements
-function hideShow (show, hide, hide2) {
-    show.removeClass('hidden');
-    show.addClass('visible');
-    hide.removeClass('visible');
-    hide.addClass('hidden');
-    hide2.removeClass('visible');
-    hide2.addClass('hidden');
-}
+initialFormEl.on('submit', function(event) {
+    event.preventDefault();
 
-startButton.on('click', function () {
-    hideShow(quizSection, startSection, highScore);
-    startQuiz();
+    var playerInitial = $('input[name=initial]').val();
+    if (playerInitial === "") {
+        return;
+    }
+    var player = {
+        initial: playerInitial,
+        playerScore: score
+    }
+    highScore.push(player);
 });
-
-function gameOver() {
-    clearInterval(timer);
-    timerElement.text("");
-    hideShow(highScore, quizSection, startSection);
-    highScore.text('Your score is ' + score + '/10');
-}
-
-function timerStart() {
-    timer = setInterval (function() {
-        secondsLeft--;
-        timerElement.text(secondsLeft + " left");
-        if(secondsLeft === 0) {
-            gameOver();
-        }
-    }, 1000);
-}
 
 // Questions are an array of question objects
 var questionBank = [
