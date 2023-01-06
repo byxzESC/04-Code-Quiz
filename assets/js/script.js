@@ -11,6 +11,7 @@ var userInfo = $('#user-info');
 var scoreSection = $('#score-section');
 var highScoreEl = $('#high-score');
 var viewHighScoreEl = $('#view-high-score');
+var timerEl = $('#timer');
 var tryAgain = $('#try-again');
 
 // quiz question and answers variables
@@ -24,7 +25,6 @@ var answerMessage = $('#answer-message');
 // variable for timer and high score
 var playerScore = $('#player-score');
 var initialFormEl = $('#initial-form');
-var timerEl = $('#timer');
 
 var currentQuestion;
 var highScore = [];
@@ -55,7 +55,7 @@ function startQuiz () {
 function timerStart() {
     timer = setInterval (function() {
         secondsLeft--;
-        timerEl.text(secondsLeft + " left");
+        timerEl.text(secondsLeft + "s left");
         // Acceptance Criteria --- timer reaches 0, the game is over
         if(secondsLeft <= 0) {
             gameOver();
@@ -153,7 +153,7 @@ function renderHighScores () {
     for (var i = 0; i < highScore.length; i++) {
         var playerScore = highScore[i];
         var li = document.createElement("li");
-        li.textContent = playerScore.initial + ' has score of ' + playerScore.playerScore + ' points.';
+        li.textContent = playerScore.initial + ' has score of ' + playerScore.playerScore + '/' + randomizedQuestions.length;
         highScoreEl.append(li);
     }
 
@@ -199,6 +199,8 @@ buttonD.on('click', function() {
 
 // listens to view high score button
 viewHighScoreEl.on('click', function() {
+    clearInterval(timer);
+    timerEl.text('');
     renderHighScores();
 });
 
