@@ -135,21 +135,22 @@ function hideShowEl (show, hide, hide2, hide3) {
 }
 
 // show high score when player clicks on high score or when game over
-function getHighScoreList () {
+function getHighScoreList() {
     var storedScores = JSON.parse(localStorage.getItem('scoreHistory'));
     if (storedScores !== null) {
         highScore = storedScores;
     }
 }
 
-function storeHighScore () {
+function storeHighScore() {
     localStorage.setItem("scoreHistory", JSON.stringify(highScore));
 }
 
-function renderHighScores () {
-    hideShowEl(scoreSection, startSection, quizSection);
+function renderHighScores() {
     highScoreEl.empty();
-
+    
+    getHighScoreList();
+    hideShowEl(scoreSection, startSection, quizSection);
     for (var i = 0; i < highScore.length; i++) {
         var playerScore = highScore[i];
         var li = document.createElement("li");
