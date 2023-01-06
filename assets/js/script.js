@@ -1,3 +1,8 @@
+// whenever player clicked on an answer we move on the next question
+    // changing content of question and answer tag by setting reference to the question object
+// all the way till player done with the quiz
+// after that player able to enter their initial and see the leader board
+
 // variable to keep score, initials, different section of html 
 var startSection = $('#start-section');
 var startButton = $('#start-btn');
@@ -28,11 +33,6 @@ var secondsLeft;
 var randomizedQuestions = [];
 var timer;
 
-// whenever player clicked on an answer we move on the next question
-    // changing content of question and answer tag by setting reference to the question object
-// all the way till player done with the quiz
-// after that player able to enter their initial and see the leader board
-
 // Acceptance Criteria --- WHEN I click the start button, presented with a question
 function startQuiz () {
 
@@ -51,6 +51,7 @@ function startQuiz () {
     renderQuestions();
 }
 
+// count down timer function
 function timerStart() {
     timer = setInterval (function() {
         secondsLeft--;
@@ -62,7 +63,7 @@ function timerStart() {
     }, 1000);
 }
 
-// randomize the questionBank objects array
+// shuffles questionBank and store into randomizedQuestion
 function shuffleQuestions (questions) {
     var result;
     result = questions.sort(function() {
@@ -107,6 +108,7 @@ function nextQuestion (message) {
     }
 }
 
+// game over function
 function gameOver() {
     clearInterval(timer);
     timerEl.text("");
@@ -158,7 +160,7 @@ function renderHighScores () {
     hideShowEl(tryAgain);
 }
 
-// detect what answer player selected
+// detect what answer button player selected
 buttonA.on('click', function() {
     var answer = 'answerA';
     if (answer === randomizedQuestions[currentQuestion].correctAnswer) {
