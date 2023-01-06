@@ -25,18 +25,20 @@ body {
     margin-top: 3%;
 }
 
-#header a {
-    text-align: left;
-    padding: 3% 0% 0% 0%;
-    width: 30%;
+#header button {
+    text-align: center;
+    width: 20%;
 }
 
 #header h1 {
-    width: 40%;
+    width: 60%;
 }
 
 #header p {
-    width: 30%;
+    border: 1px solid var(--accent);
+    font-size: 1.5rem;
+    text-align: center;
+    width: 19%;
 }
 
 #start-section {
@@ -80,6 +82,10 @@ body {
 
 #high-score {
     font-size: 2rem;
+}
+
+li {
+    list-style-type: none;
 }
 
 @media screen and (min-width: 992px) {

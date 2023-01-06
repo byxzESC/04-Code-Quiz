@@ -1,21 +1,12 @@
-// AS A coding boot camp student
-// I WANT to take a timed quiz on JavaScript fundamentals that stores high scores
-// SO THAT I can gauge my progress compared to my peers
-// GIVEN I am taking a code quiz
-// WHEN I click the start button---              THEN a timer starts and I am presented with a question
-// WHEN I answer a question---                   THEN I am presented with another question
-// WHEN I answer a question incorrectly---       THEN time is subtracted from the clock
-// WHEN all questions are answered or the timer reaches 0---   THEN the game is over
-// WHEN the game is over ---                     THEN I can save my initials and score
-
 // variable to keep score, initials, different section of html 
 var startSection = $('#start-section');
 var startButton = $('#start-btn');
 var quizSection = $('#quiz-section');
 var userInfo = $('#user-info');
+var scoreSection = $('#score-section');
 var highScoreEl = $('#high-score');
-var scoreBoard = $('#score-board');
-var tryAgain = $('try-again');
+var viewHighScoreEl = $('#view-high-score');
+var tryAgain = $('#try-again');
 
 // quiz question and answers variables
 var questionEl = $('#question');
@@ -29,29 +20,32 @@ var answerMessage = $('#answer-message');
 var playerScore = $('#player-score');
 var initialFormEl = $('#initial-form');
 var timerEl = $('#timer');
-var timer;
-var secondsLeft;
 
-var randomizedQuestions = [];
 var currentQuestion;
-var score;
 var highScore = [];
+var score;
+var secondsLeft;
+var randomizedQuestions = [];
+var timer;
 
 // whenever player clicked on an answer we move on the next question
     // changing content of question and answer tag by setting reference to the question object
 // all the way till player done with the quiz
 // after that player able to enter their initial and see the leader board
 
-// function for starting the quiz
-    // randomized questions
-    // start timer
-    // show questions and answers
+// Acceptance Criteria --- WHEN I click the start button, presented with a question
 function startQuiz () {
+
+    // reset to original state
     randomizedQuestions = shuffleQuestions(questionBank);
     score = 0;
     currentQuestion = 0;
     clearInterval(timer);
-    highScoreEl.text('');
+
+    // get high score from local-storage
+    getHighScoreList ();
+
+    // quiz starts
     secondsLeft = 40;
     timerStart();
     renderQuestions();
@@ -61,7 +55,8 @@ function timerStart() {
     timer = setInterval (function() {
         secondsLeft--;
         timerEl.text(secondsLeft + " left");
-        if(secondsLeft === 0) {
+        // Acceptance Criteria --- timer reaches 0, the game is over
+        if(secondsLeft <= 0) {
             gameOver();
         }
     }, 1000);
@@ -84,23 +79,27 @@ function renderQuestions() {
     buttonD.text(randomizedQuestions[currentQuestion].answerD);
 }
 
+// Acceptance Criteria --- answer a question , presented with another question
 function nextQuestion (message) {
-    answerMessage.text('');
+
     // correct/wrong msg
+    answerMessage.text('');
     if (message === 'correct') {
         score++;
         answerMessage.fadeIn(100);
         answerMessage.text('correct');
         answerMessage.fadeOut(900);
     } else if (message === 'wrong') {
+        // Acceptance Criteria --- question incorrectly - subtracts time from the clock
+        secondsLeft -= 5;
         answerMessage.fadeIn(100);
         answerMessage.text('wrong');
         answerMessage.fadeOut(900);
     }
 
     // check answer
-    // randomizedQuestions.length - 1
-    if (currentQuestion === 2) {
+    if (currentQuestion === randomizedQuestions.length - 1) {
+        // Acceptance Criteria --- all questions are answered THEN Game is over
         gameOver();
     } else {
         currentQuestion++;
@@ -111,38 +110,43 @@ function nextQuestion (message) {
 function gameOver() {
     clearInterval(timer);
     timerEl.text("");
-    hideShow(userInfo, quizSection, startSection);
+    hideShowEl(userInfo, quizSection, startSection);
     playerScore.text('Your score is ' + score + '/10');
 }
 
 // function to hide and show start and quiz elements
-function hideShow (show, hide, hide2) {
+function hideShowEl (show, hide, hide2, hide3) {
     show.removeClass('hidden');
     show.addClass('visible');
-    hide.removeClass('visible');
-    hide.addClass('hidden');
-    hide2.removeClass('visible');
-    hide2.addClass('hidden');
+    if (hide !== undefined) {
+        hide.removeClass('visible');
+        hide.addClass('hidden');
+    }
+    if (hide2 !== undefined) {
+        hide2.removeClass('visible');
+        hide2.addClass('hidden');
+    }
+    if (hide3 !== undefined) {
+        hide3.removeClass('visible');
+        hide3.addClass('hidden');
+    }
 }
 
-// function handleFormSubmit (e) {
-//     console.log('form submitted');
-//     e.preventDefault();
-//     // playerInitial = $('input[name=initial]').val();
-//     localStorage.setItem('scoreHistory', JSON.stringify(highScore));
-// }
-
 // show high score when player clicks on high score or when game over
-function highScoreList () {
+function getHighScoreList () {
     var storedScores = JSON.parse(localStorage.getItem('scoreHistory'));
     if (storedScores !== null) {
         highScore = storedScores;
     }
-    renderHighScores();
+}
+
+function storeHighScore () {
+    localStorage.setItem("scoreHistory", JSON.stringify(highScore));
 }
 
 function renderHighScores () {
-    highScoreEl.innerHTML = "";
+    hideShowEl(scoreSection, startSection, quizSection);
+    highScoreEl.empty();
 
     for (var i = 0; i < highScore.length; i++) {
         var playerScore = highScore[i];
@@ -151,23 +155,10 @@ function renderHighScores () {
         highScoreEl.append(li);
     }
 
-    tryAgain.addClass('visible');
+    hideShowEl(tryAgain);
 }
 
-tryAgain.on('click', function() {
-    startQuiz();
-});
-
-scoreBoard.on('click', function() {
-    hideShow(highScoreEl, startSection, quizSection);
-    renderHighScores();
-});
-
-startButton.on('click', function () {
-    hideShow(quizSection, startSection, highScoreEl);
-    startQuiz();
-});
-
+// detect what answer player selected
 buttonA.on('click', function() {
     var answer = 'answerA';
     if (answer === randomizedQuestions[currentQuestion].correctAnswer) {
@@ -204,11 +195,31 @@ buttonD.on('click', function() {
     }
 });
 
+// listens to view high score button
+viewHighScoreEl.on('click', function() {
+    renderHighScores();
+});
+
+// Acceptance Criteria --- WHEN I click the start button, presented with a question
+startButton.on('click', function () {
+    hideShowEl(quizSection, startSection, scoreSection);
+    hideShowEl(timerEl);
+    startQuiz();
+});
+
+// listens to try again a tag
+tryAgain.on('click', function() {
+    startQuiz();
+});
+
+// Acceptance Criteria --- WHEN the game is over THEN I can save my initials and score
 initialFormEl.on('submit', function(event) {
     event.preventDefault();
 
+    // stores enter initial and score into highScore array
     var playerInitial = $('input[name=initial]').val();
     if (playerInitial === "") {
+        alert("Please Enter your initials");
         return;
     }
     var player = {
@@ -216,9 +227,14 @@ initialFormEl.on('submit', function(event) {
         playerScore: score
     }
     highScore.push(player);
+
+    playerInitial = "";
+    $('input[name=initial]').addClass('hidden');
+    storeHighScore();
+    renderHighScores();
 });
 
-// Questions are an array of question objects
+// quiz questions
 var questionBank = [
     {
         question: 'What are not JavaScript Data Types?',

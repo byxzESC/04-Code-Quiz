@@ -11,9 +11,9 @@
 <body>
     <!-- header - "view high score" "count down timer" -->
     <header id="header">
-        <a id="score-board" href="#high-score">View high Score</a>
+        <button id="view-high-score">View high Score</button>
         <h1>Welcome to Code Quiz</h1>
-        <p id="timer"></p>
+        <p id="timer" class="hidden"></p>
     </header>
 
     <!-- ask user if they like to play -->
@@ -50,9 +50,10 @@
 
     <!-- score board  -->
     <!-- show final score and enter initial after quiz complete -->
-    <ul id="high-score"></ul>
-    <a id="try-again" class="hidden" href="">Try Again ?</a>
-
+    <section id="score-section" class="hidden">
+        <ul id="high-score"></ul>
+        <a id="try-again" class="hidden" href="">Try Again ?</a>
+    </section>
     <!-- jquery cnd -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="./assets/js/script.js"></script>
